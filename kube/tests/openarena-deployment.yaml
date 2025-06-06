@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openarena-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openarena
+  template:
+    metadata:
+      labels:
+        app: openarena
+    spec:
+      containers:
+      - name: openarena
+        image: sago007/openarena
+        ports:
+        - containerPort: 27960
+          protocol: UDP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openarena-service
+spec:
+  type: NodePort
+  selector:
+    app: openarena
+  ports:
+  - protocol: UDP
+    port: 27960
+    targetPort: 27960
+    nodePort: 30060
